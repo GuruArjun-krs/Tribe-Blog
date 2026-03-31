@@ -3,6 +3,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import HomeScreen from "../Screens/Home";
 import ProfileScreen from "../Screens/Profile";
 
+// this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
     headerShown: false,
     presentation: 'formSheet',
@@ -23,6 +24,5 @@ export const Screens = [
         key: 'profile',
         name: 'Profile',
         component: ProfileScreen,
-        options: options
     }
 ]

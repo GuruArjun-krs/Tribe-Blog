@@ -1,18 +1,15 @@
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { Button, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Button } from 'react-native'
+import { PrimaryLayout } from '../../Layout'
 
 const HomeScreen = () => {
     const navigation = useNavigation<any>()
 
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-                onPress={() => navigation.navigate('Profile')}
-                title='Go to Profile'
-            />
-        </SafeAreaView >
+        <PrimaryLayout>
+            <Button title='Next' onPress={() => navigation.navigate('Profile')} />
+        </PrimaryLayout>
     )
 }
 

@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Screens } from './stackScreens';
-import AppHeader from './customHeader';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +12,7 @@ const MainStacks = () => {
             <Stack.Navigator
                 initialRouteName="Home"
                 screenOptions={{
-                    header: (props) => <AppHeader {...props} />
+                    headerShown: false
                 }}
             >
                 {Screens?.map((el) => (
