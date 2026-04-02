@@ -24,5 +24,6 @@ export const Screens = [
         key: 'profile',
         name: 'Profile',
         component: ProfileScreen,
+        options: options  // this is how u trigger default bottomsheet when navigating as screen
     }
 ]
