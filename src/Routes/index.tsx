@@ -1,23 +1,23 @@
 import React from 'react'
+import { Platform, StatusBar } from 'react-native';
 import { TourGuideProvider } from 'rn-tourguide';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Tooltip } from '@/Components';
 import { StackScreens } from '@/Routes/Screen';
-import AppHeader from '@/Routes/AppHeader';
 import { COLORS } from '@/Utils/colors';
+import { AppHeader } from '@/Routes/Header';
 
 const Stack = createNativeStackNavigator();
 
 const MainStacks = () => {
     return (
         <TourGuideProvider
-            verticalOffset={30}
+            verticalOffset={Platform.OS === 'android' ? StatusBar.currentHeight : 0}
             tooltipComponent={Tooltip}
             backdropColor="rgba(0, 0, 0, 0.5)"
             androidStatusBarVisible={false}
-            borderRadius={20}
         >
             <NavigationContainer>
                 <Stack.Navigator
@@ -40,7 +40,7 @@ const MainStacks = () => {
                     ))}
                 </Stack.Navigator>
             </NavigationContainer>
-        </TourGuideProvider>
+        </TourGuideProvider >
     )
 }
 

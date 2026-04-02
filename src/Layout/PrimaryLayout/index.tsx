@@ -1,6 +1,6 @@
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StatusBar } from 'react-native'
+import { StatusBar, View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native';
 import { COLORS } from '@/Utils/colors';
 interface LayoutType {
@@ -23,7 +23,9 @@ const PrimaryLayout = ({ appStyle, children, bgColor = COLORS.white }: LayoutTyp
                     translucent={false}
                 />
             )}
-            {children}
+            <View style={{ flex: 1, padding: 20 }}>
+                {children}
+            </View>
         </SafeAreaView>
     )
 }
