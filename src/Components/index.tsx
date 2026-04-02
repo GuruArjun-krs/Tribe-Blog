@@ -1,9 +1,11 @@
-import Typo from "./Typo";
-import { Tooltip } from "./Tooltip";
-import AppIcon from "./AppIcon";
+import Typo from "@/Components/Typo";
+import { Tooltip } from "@/Components/Tooltip";
+import AppIcon from "@/Components/AppIcon";
+import ButtonComp from "@/Components/Button";
 
 export {
     Typo,
     Tooltip,
-    AppIcon
+    AppIcon,
+    ButtonComp
 }

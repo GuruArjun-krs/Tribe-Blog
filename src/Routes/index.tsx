@@ -3,36 +3,39 @@ import { TourGuideProvider } from 'rn-tourguide';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { Screens } from './stackScreens';
-import { Tooltip } from '../Components';
+import { Tooltip } from '@/Components';
+import { StackScreens } from '@/Routes/Screen';
+import AppHeader from '@/Routes/AppHeader';
+import { COLORS } from '@/Utils/colors';
 
 const Stack = createNativeStackNavigator();
 
 const MainStacks = () => {
     return (
         <TourGuideProvider
-            verticalOffset={34}
+            verticalOffset={30}
             tooltipComponent={Tooltip}
-            backdropColor="rgba(0, 0, 0, 0.1)"
+            backdropColor="rgba(0, 0, 0, 0.5)"
             androidStatusBarVisible={false}
             borderRadius={20}
         >
             <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName="Home"
+                    initialRouteName="BottomTab"
                     screenOptions={{
-                        headerShown: false
+                        headerShown: true,
+                        header: (props) => <AppHeader {...props} />,
+                        headerStyle: {
+                            backgroundColor: COLORS.white,
+                        },
                     }}
                 >
-                    {Screens?.map((el) => (
+                    {StackScreens?.map((el) => (
                         <Stack.Screen
                             key={el?.key}
                             name={el?.name}
                             component={el?.component}
-                            options={{
-                                ...el.options,
-                                title: el.name
-                            }}
+                            options={el?.options || {}}
                         />
                     ))}
                 </Stack.Navigator>

@@ -1,7 +1,8 @@
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-import HomeScreen from "../Screens/Home";
-import ProfileScreen from "../Screens/Profile";
+import HomeScreen from '@/Screens/Home';
+import ProfileScreen from '@/Screens/Profile';
+import BottomTabs from '@/Routes/BottomTab';
 
 // this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
@@ -14,7 +15,18 @@ const options: NativeStackNavigationOptions = {
     fullScreenGestureEnabled: false,
 }
 
-export const Screens = [
+export const StackScreens = [
+    {
+        key: 'bottomTab',
+        name: 'BottomTab',
+        component: BottomTabs,
+        options: {
+            title: 'Home'
+        }
+    },
+]
+
+export const TabScreens = [
     {
         key: 'home',
         name: 'Home',
@@ -24,6 +36,5 @@ export const Screens = [
         key: 'profile',
         name: 'Profile',
         component: ProfileScreen,
-        options: options  // this is how u trigger default bottomsheet when navigating as screen
     }
 ]
