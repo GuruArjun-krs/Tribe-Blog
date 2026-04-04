@@ -7,9 +7,10 @@ interface LayoutType {
     appStyle?: any
     children: any
     bgColor?: string
+    childStyle?: any
 }
 
-const PrimaryLayout = ({ appStyle, children, bgColor = COLORS.white }: LayoutType) => {
+const PrimaryLayout = ({ appStyle, children, bgColor = COLORS.white, childStyle }: LayoutType) => {
     const isFocused = useIsFocused();
     const isLightBackground = bgColor === COLORS.white || bgColor === '#FFFFFF';
 
@@ -23,7 +24,7 @@ const PrimaryLayout = ({ appStyle, children, bgColor = COLORS.white }: LayoutTyp
                     translucent={false}
                 />
             )}
-            <View style={{ flex: 1, padding: 20 }}>
+            <View style={[{ flex: 1, }, childStyle]}>
                 {children}
             </View>
         </SafeAreaView>

@@ -5,7 +5,8 @@
     "types": ["jest"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@env": ["src/Types/env"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

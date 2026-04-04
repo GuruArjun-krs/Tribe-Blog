@@ -8,6 +8,7 @@ interface TypoType {
     variant?: keyof typeof styles
     color?: string
     style?: any
+    numberOfLines?: number
 }
 
 const Typo = ({ title, variant = 'bodyMediumTertiary', color = COLORS.black, style, ...props }: TypoType) => {
