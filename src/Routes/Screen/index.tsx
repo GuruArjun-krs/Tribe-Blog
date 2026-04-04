@@ -5,6 +5,9 @@ import ProfileScreen from '@/Screens/Profile';
 import BottomTabs from '@/Routes/BottomTab';
 import { AppIcon } from '@/Components';
 import { COLORS } from '@/Utils/colors';
+import { LoginScreen, RegisterScreen } from '@/Screens/Auth';
+import EditProfileScreen from '@/Screens/Profile/SubScreen/EditProfile';
+import LikeScreen from '@/Screens/Likes';
 
 // this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
@@ -26,6 +29,38 @@ export const StackScreens = [
             title: 'Home'
         }
     },
+    {
+        key: 'login',
+        name: 'Login',
+        component: LoginScreen,
+        options: {
+            title: 'Tell Your Story',
+        }
+    },
+    {
+        key: 'register',
+        name: 'Register',
+        component: RegisterScreen,
+        options: {
+
+        }
+    },
+    {
+        key: 'editProfile',
+        name: 'EditProfile',
+        component: EditProfileScreen,
+        options: {
+            title: 'Edit Profile'
+        }
+    },
+    {
+        key: 'like',
+        name: 'Like',
+        component: LikeScreen,
+        options: {
+            title: "Let's see who liked"
+        }
+    }
 ]
 
 export const TabScreens = [

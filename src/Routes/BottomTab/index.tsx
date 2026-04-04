@@ -10,7 +10,6 @@ const Tab = createBottomTabNavigator();
 
 export const ContextParent = createContext<any>(null);
 
-
 const BottomTabs = () => {
     const [layoutChange, setLayoutChange] = useState<any>({
         tabBgColor: COLORS.white,
