@@ -9,6 +9,7 @@ import { ContextParent } from '@/Routes/BottomTab';
 import { HeaderLeft } from '@/Routes/Header';
 import useFetchLocal from '@/Hooks/useFetchLocal';
 import { useUserProfile } from '@/Api/Hooks/UserHook';
+import { useMyBlogs } from '@/Api/Hooks/BlogHook';
 
 const { width: ScreenWidth } = Dimensions.get('window')
 const COLUMN_SIZE = ScreenWidth / 3;
@@ -19,7 +20,7 @@ const ProfileScreen = () => {
     const { setLayoutChange } = layoutContext;
     const { isLogin, userId } = useFetchLocal();
     const { data: userProfile } = useUserProfile({ id: userId })
-    const [posts] = useState(new Array(12).fill({ id: Math.random() }));
+    const { data: myBlogList } = useMyBlogs()
 
     useLayoutEffect(() => {
         const parent = navigation.getParent();
@@ -55,7 +56,7 @@ const ProfileScreen = () => {
                     <Image source={{ uri: userProfile?.data?.profileImg }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
                 </View>
                 <View style={{ alignItems: 'center' }}>
-                    <Typo title={posts?.length?.toString()} variant="bodyMediumSecondary" />
+                    <Typo title={myBlogList?.count?.toString()} variant="bodyMediumSecondary" />
                     <Typo title="Posts" variant="bodyMediumTertiary" />
                 </View>
                 <View style={{ alignItems: 'center' }}>
@@ -89,18 +90,24 @@ const ProfileScreen = () => {
         </View>
     );
 
-    const renderPostItem = () => (
-        <TouchableOpacity style={{ width: COLUMN_SIZE, height: COLUMN_SIZE, borderWidth: 0.5, borderColor: COLORS.primary[900] }}>
-            <View style={{ flex: 1, backgroundColor: COLORS.primary[800] }} />
+    const renderPostItem = ({ item }: any) => (
+        <TouchableOpacity style={{ width: COLUMN_SIZE, height: COLUMN_SIZE, borderWidth: 0.5, borderColor: COLORS.primary[900] }} onPress={() => navigation.navigate('BlogDetails', { id: item?._id })}>
+            <View style={{ flex: 1, backgroundColor: COLORS.primary[800], position: 'relative' }}>
+                <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%' }} />
+
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
+                    <Typo title={item?.title} style={{ backgroundColor: COLORS.white, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 4 }} />
+                </View>
+            </View>
         </TouchableOpacity>
     );
 
     return (
         <PrimaryLayout bgColor={COLORS.primary[900]}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flex: 1 }}>
                 {isLogin === 'success' ? (
                     <FlatList
-                        data={posts}
+                        data={myBlogList?.data}
                         renderItem={renderPostItem}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={3}

@@ -19,3 +19,8 @@ export const BlogById = async (id: string) => {
     const res = await api.get(`/posts/${id}`);
     return res?.data;
 };
+
+export const MyBlogs = async () => {
+    const res = await api.get(`/posts/me`);
+    return res?.data;
+};
