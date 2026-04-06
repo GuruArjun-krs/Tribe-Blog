@@ -9,6 +9,7 @@ import useFetchLocal from '@/Hooks/useFetchLocal'
 import { useFormik } from 'formik'
 import { useUserProfile, useUserProfileUpdate } from '@/Api/Hooks/UserHook'
 import { ButtonComp, SelectDropdownComp, TextInput } from '@/Components'
+import { showToast } from '@/Utils/toastHelper'
 
 const EditProfileScreen = () => {
     const navigation = useNavigation<any>()
@@ -53,6 +54,7 @@ const EditProfileScreen = () => {
             updateProfile({ payload: values, id: userId }, {
                 onSuccess: (data) => {
                     if (data?.success) {
+                        showToast('success', 'Profile updated successfully.')
                         navigation.reset({
                             index: 0,
                             routes: [
@@ -107,10 +109,10 @@ const EditProfileScreen = () => {
                 />
                 <SelectDropdownComp
                     value={profileFormik.values.gender}
-                    onSelect={(val) => profileFormik.setFieldValue('gender', val)}
+                    onSelect={(val: any) => profileFormik.setFieldValue('gender', val?.id)}
                     options={[
-                        { title: 'Male', id: 'male' },
-                        { title: 'Female', id: 'female' }
+                        { title: 'Male', id: 'Male' },
+                        { title: 'Female', id: 'Female' }
                     ]}
                 />
                 <ButtonComp title='Update Profile' onPress={profileFormik.handleSubmit} style={{ backgroundColor: COLORS.secondary[700] }} />

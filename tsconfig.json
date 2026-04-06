@@ -9,6 +9,6 @@
       "@env": ["src/Types/env"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "toastConfig.js"],
   "exclude": ["**/node_modules", "**/Pods"]
 }

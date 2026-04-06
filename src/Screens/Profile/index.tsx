@@ -55,7 +55,7 @@ const ProfileScreen = () => {
                     <Image source={{ uri: userProfile?.data?.profileImg }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
                 </View>
                 <View style={{ alignItems: 'center' }}>
-                    <Typo title={posts.length.toString()} variant="bodyMediumSecondary" />
+                    <Typo title={posts?.length?.toString()} variant="bodyMediumSecondary" />
                     <Typo title="Posts" variant="bodyMediumTertiary" />
                 </View>
                 <View style={{ alignItems: 'center' }}>
@@ -83,7 +83,7 @@ const ProfileScreen = () => {
                     <ButtonComp title='Edit Profile' onPress={() => navigation.navigate('EditProfile')} textColor={COLORS.primary[900]} />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <ButtonComp title='Logout' onPress={() => { }} textColor={COLORS.primary[900]} />
+                    <ButtonComp title='Logout' onPress={() => navigation.navigate('Logout')} textColor={COLORS.primary[900]} />
                 </View>
             </View>
         </View>
