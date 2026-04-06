@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Dimensions, FlatList, Image, TouchableOpacity, View } from 'react-native';
 
 import { PrimaryLayout } from '@/Layout';
-import { ButtonComp, Typo } from '@/Components';
+import { AppIcon, ButtonComp, Typo } from '@/Components';
 import { COLORS } from '@/Utils/colors';
 import { ContextParent } from '@/Routes/BottomTab';
 import { HeaderLeft } from '@/Routes/Header';
@@ -27,6 +27,7 @@ const ProfileScreen = () => {
         const focusUnsubscribe = navigation.addListener('focus', () => {
             parent?.setOptions({
                 headerStyle: { backgroundColor: COLORS.primary[900] },
+                title: 'My Profile',
                 headerLeft: () => (
                     <HeaderLeft onPress={() => navigation.navigate('BottomTab', { screen: 'Home' })} />
                 )
@@ -39,7 +40,8 @@ const ProfileScreen = () => {
         const blurUnsubscribe = navigation.addListener('blur', () => {
             parent?.setOptions({
                 headerStyle: { backgroundColor: COLORS.white },
-                headerLeft: null
+                headerLeft: null,
+                title: null
             });
         });
 
@@ -72,11 +74,23 @@ const ProfileScreen = () => {
             <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                     <Typo title={userProfile?.data?.name} variant="bodyMediumSecondary" />
-                    <Typo title={userProfile?.data?.gender === "Male" ? "(He / Him)" : userProfile?.data?.gender === "Female" ? "(She / Her)" : ""} variant="bodyMediumSecondary" color={COLORS.text[300]} />
+                    {userProfile?.data?.gender && (
+                        <Typo title={userProfile?.data?.gender === "Male" ? "(He / Him)" : userProfile?.data?.gender === "Female" ? "(She / Her)" : ""} variant="bodyMediumSecondary" color={COLORS.text[300]} />
+                    )}
 
                 </View>
-                <Typo title={userProfile?.data?.nickname} color={COLORS.text.disabledSecondary} variant="bodySmallTertiary" />
-                <Typo title={userProfile?.data?.bio} variant="bodyMediumTertiary" />
+                {userProfile?.data?.nickname && (
+                    <Typo title={userProfile?.data?.nickname} color={COLORS.text.disabledSecondary} variant="bodySmallTertiary" />
+                )}
+                {userProfile?.data?.bio && (
+                    <Typo title={userProfile?.data?.bio} variant="bodyMediumTertiary" />
+                )}
+                {(!userProfile?.data?.bio || !userProfile?.data?.bio) && (
+                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }} onPress={() => navigation.navigate('EditProfile')}>
+                        <Typo title='Complete your Profile' color={COLORS.text.secondary} variant='bodySmallTertiary' />
+                        <AppIcon name='chevron-right' type='Feather' size={12} />
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -94,7 +108,6 @@ const ProfileScreen = () => {
         <TouchableOpacity style={{ width: COLUMN_SIZE, height: COLUMN_SIZE, borderWidth: 0.5, borderColor: COLORS.primary[900] }} onPress={() => navigation.navigate('BlogDetails', { id: item?._id })}>
             <View style={{ flex: 1, backgroundColor: COLORS.primary[800], position: 'relative' }}>
                 <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%' }} />
-
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
                     <Typo title={item?.title} style={{ backgroundColor: COLORS.white, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 4 }} />
                 </View>
@@ -102,16 +115,27 @@ const ProfileScreen = () => {
         </TouchableOpacity>
     );
 
+    const renderNoData = () => {
+        return (
+            <View style={{ justifyContent: 'center', alignItems: 'center', padding: 16, gap: 20 }}>
+                <Typo title='Post your First Story' color='red' variant='titleMediumSecondary' />
+                <ButtonComp title='Write My First Story' style={{ backgroundColor: COLORS.primary[900] }} onPress={() => navigation.navigate('BottomTab', { screen: 'AddBlog' })} />
+            </View>
+        )
+    }
+
     return (
         <PrimaryLayout bgColor={COLORS.primary[900]}>
             <View style={{ flex: 1 }}>
                 {isLogin === 'success' ? (
                     <FlatList
-                        data={myBlogList?.data}
+                        data={myBlogList?.data || []}
                         renderItem={renderPostItem}
+                        ListEmptyComponent={renderNoData}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={3}
                         ListHeaderComponent={ProfileHeader}
+                        contentContainerStyle={{ flexGrow: 1 }}
                         showsVerticalScrollIndicator={false}
                     />
                 ) : (
