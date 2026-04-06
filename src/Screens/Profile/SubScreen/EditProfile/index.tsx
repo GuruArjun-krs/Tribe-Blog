@@ -109,10 +109,10 @@ const EditProfileScreen = () => {
                 />
                 <SelectDropdownComp
                     value={profileFormik.values.gender}
-                    onSelect={(val) => profileFormik.setFieldValue('gender', val)}
+                    onSelect={(val: any) => profileFormik.setFieldValue('gender', val?.id)}
                     options={[
-                        { title: 'Male', id: 'male' },
-                        { title: 'Female', id: 'female' }
+                        { title: 'Male', id: 'Male' },
+                        { title: 'Female', id: 'Female' }
                     ]}
                 />
                 <ButtonComp title='Update Profile' onPress={profileFormik.handleSubmit} style={{ backgroundColor: COLORS.secondary[700] }} />

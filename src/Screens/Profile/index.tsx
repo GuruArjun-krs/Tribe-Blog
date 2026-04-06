@@ -83,7 +83,7 @@ const ProfileScreen = () => {
                     <ButtonComp title='Edit Profile' onPress={() => navigation.navigate('EditProfile')} textColor={COLORS.primary[900]} />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <ButtonComp title='Logout' onPress={() => { }} textColor={COLORS.primary[900]} />
+                    <ButtonComp title='Logout' onPress={() => navigation.navigate('Logout')} textColor={COLORS.primary[900]} />
                 </View>
             </View>
         </View>

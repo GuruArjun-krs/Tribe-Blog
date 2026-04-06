@@ -1,15 +1,16 @@
 import React, { useLayoutEffect } from 'react'
-import { View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from 'formik'
 
-import { ButtonComp, TextInput } from '@/Components'
+import { ButtonComp, TextInput, Typo } from '@/Components'
 import { PrimaryLayout } from '@/Layout'
 import { HeaderLeft } from '@/Routes/Header'
 import { COLORS } from '@/Utils/colors'
 import { LoginSchema } from '@/Utils/validationSchema'
 import { useLogin } from '@/Api/Hooks/AuthHook'
+import { showToast } from '@/Utils/toastHelper';
 
 const LoginScreen = () => {
     const navigation = useNavigation<any>()
@@ -43,6 +44,7 @@ const LoginScreen = () => {
             password: ''
         },
         validationSchema: LoginSchema,
+        enableReinitialize:true,
         onSubmit: values => {
             loginApi({
                 email: values.email,
@@ -55,6 +57,7 @@ const LoginScreen = () => {
                         await AsyncStorage.setItem('userId', data?.data?._id || "");
                         await AsyncStorage.setItem('userName', data?.data?.name || "");
                         await AsyncStorage.setItem('role', String(data?.data?.isAdmin))
+                        showToast('success', 'Login Successful')
                         navigation.reset({
                             index: 0,
                             routes: [
@@ -97,6 +100,12 @@ const LoginScreen = () => {
                     style={{ backgroundColor: COLORS.secondary[300] }}
                     onPress={loginFormik.handleSubmit}
                 />
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                    <Typo title="Don't have account?" />
+                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                        <Typo title="Register" style={{ textDecorationLine: 'underline' }} color={COLORS.secondary[300]} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </PrimaryLayout>
     )

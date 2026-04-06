@@ -10,12 +10,13 @@ import EditProfileScreen from '@/Screens/Profile/SubScreen/EditProfile';
 import LikeScreen from '@/Screens/Likes';
 import AddBlog from '@/Screens/AddBlog';
 import BlogDetails from '@/Screens/Home/SubScreen/BlogDetail';
+import Logout from '@/Screens/Profile/SubScreen/Logout';
 
 // this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
     headerShown: false,
     presentation: 'formSheet',
-    sheetAllowedDetents: [0.5, 0.9],
+    sheetAllowedDetents: 'fitToContents',
     sheetInitialDetentIndex: 0,
     sheetGrabberVisible: true,
     animation: 'slide_from_bottom',
@@ -44,7 +45,7 @@ export const StackScreens = [
         name: 'Register',
         component: RegisterScreen,
         options: {
-
+            title: 'Join us and share your story',
         }
     },
     {
@@ -67,6 +68,12 @@ export const StackScreens = [
         key: 'blogDetail',
         name: 'BlogDetails',
         component: BlogDetails,
+    },
+    {
+        key: 'logout',
+        name: 'Logout',
+        component: Logout,
+        options: options
     }
 ]
 

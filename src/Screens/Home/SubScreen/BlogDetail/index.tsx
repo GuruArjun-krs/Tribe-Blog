@@ -15,7 +15,11 @@ const BlogDetails = ({ route }: any) => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
+            headerStyle: { backgroundColor: COLORS.purple },
             title: `${BlogDetail?.data?.title || 'Blog'} by ${BlogDetail?.data?.createdBy?.name || 'Author'}`,
+            headerLeft: () => (
+                <HeaderLeft onPress={() => navigation.goBack()} />
+            ),
         });
         const focusUnsubscribe = navigation.addListener('focus', () => {
             if (BlogDetail?.data) {
