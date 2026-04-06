@@ -5,6 +5,7 @@ import ButtonComp from "@/Components/Button";
 import GlobalLoader from "@/Components/GlobalLoader";
 import TextInput from "@/Components/TextInput";
 import SelectDropdownComp from "@/Components/SelectDropdown";
+import Toast from "@/Components/Toast"
 
 export {
     Typo,
@@ -13,5 +14,6 @@ export {
     ButtonComp,
     GlobalLoader,
     TextInput,
-    SelectDropdownComp
+    SelectDropdownComp,
+    Toast
 }

@@ -1,13 +1,15 @@
+import React, { useContext, useLayoutEffect } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { useFormik } from 'formik'
+import { ScrollView, View } from 'react-native'
+
 import { useAddBlog, useCategoryList } from '@/Api/Hooks/BlogHook'
 import { SelectDropdownComp, TextInput } from '@/Components'
 import { PrimaryLayout } from '@/Layout'
 import { ContextParent } from '@/Routes/BottomTab'
 import { HeaderLeft, RightHeader } from '@/Routes/Header'
 import { COLORS } from '@/Utils/colors'
-import { useNavigation } from '@react-navigation/native'
-import { useFormik } from 'formik'
-import React, { useContext, useLayoutEffect } from 'react'
-import { ScrollView, View } from 'react-native'
+import { showToast } from '@/Utils/toastHelper'
 
 const AddBlog = () => {
     const navigation = useNavigation<any>()
@@ -65,6 +67,7 @@ const AddBlog = () => {
         onSubmit: values => {
             addBlogApi(values, {
                 onSuccess: async (data) => {
+                    showToast('success', 'Blog Created successfully.')
                     navigation.reset({
                         index: 0,
                         routes: [
@@ -87,7 +90,7 @@ const AddBlog = () => {
     return (
         <PrimaryLayout bgColor={COLORS.secondary[700]}>
             <View style={{ flex: 1, padding: 16 }}>
-                <ScrollView contentContainerStyle={{ gap: 16 }}>
+                <ScrollView contentContainerStyle={{ gap: 16 }} showsVerticalScrollIndicator={false}>
                     <TextInput
                         label='Title'
                         placeHolder='Enter title'

@@ -9,6 +9,7 @@ import { LoginScreen, RegisterScreen } from '@/Screens/Auth';
 import EditProfileScreen from '@/Screens/Profile/SubScreen/EditProfile';
 import LikeScreen from '@/Screens/Likes';
 import AddBlog from '@/Screens/AddBlog';
+import BlogDetails from '@/Screens/Home/SubScreen/BlogDetail';
 
 // this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
@@ -61,6 +62,11 @@ export const StackScreens = [
         options: {
             title: "Let's see who liked"
         }
+    },
+    {
+        key: 'blogDetail',
+        name: 'BlogDetails',
+        component: BlogDetails,
     }
 ]
 

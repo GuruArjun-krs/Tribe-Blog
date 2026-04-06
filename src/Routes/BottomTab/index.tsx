@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useState } from 'react'
 import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { TourGuideZone } from 'rn-tourguide';
 import { useNavigation } from '@react-navigation/native';
 
@@ -47,17 +47,31 @@ const BottomTabs = () => {
         );
     };
 
-    const renderItem = (name: any, type: any, active: boolean, navigation: any, route: { name: string }) => {
-        const screenType = TabScreens.find((el) => el.name === route.name);
+    // const renderItem = (name: any, type: any, active: boolean, navigation: any, route: { name: string }) => {
+    //     const screenType = TabScreens.find((el) => el.name === route.name);
+
+    //     return (
+    //         <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(route.name)}>
+    //             <AppIcon
+    //                 name={name ?? ''}
+    //                 type={type as any}
+    //                 size={20}
+    //                 color={active ? screenType?.focusedColor : screenType?.unFocusedColor}
+    //             />
+    //         </TouchableOpacity>
+    //     );
+    // };
+
+    const renderItem = (name: any, type: any, active: any, screenType: any) => {
         return (
-            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(route.name)}>
+            <View style={{ alignItems: 'center' }}>
                 <AppIcon
                     name={name ?? ''}
-                    type={type as any}
+                    type={type}
                     size={20}
                     color={active ? screenType?.focusedColor : screenType?.unFocusedColor}
                 />
-            </TouchableOpacity>
+            </View>
         );
     };
 
@@ -92,9 +106,8 @@ const BottomTabs = () => {
                         display: 'flex',
                     },
                     tabBarIcon: ({ focused }) => {
-                        let iconName: any;
-                        iconName = TabScreens?.find(el => el?.name === route?.name);
-                        return renderItem(iconName?.iconName, iconName?.iconType, focused, navigation, route);
+                        const screenType = TabScreens?.find(el => el?.name === route?.name);
+                        return renderItem(screenType?.iconName, screenType?.iconType, focused, screenType);
                     },
                     tabBarLabel: ({ focused }) => (
                         <CustomTabBarLabel focused={focused} title={route?.name} />

@@ -54,5 +54,6 @@ export const COLORS = {
     },
     black: '#000000',
     white: '#FFFFFF',
-    hotPink: '#FF69B4'
+    hotPink: '#FF69B4',
+    purple: '#800080'
 };

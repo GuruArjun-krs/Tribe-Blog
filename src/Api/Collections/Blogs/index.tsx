@@ -14,3 +14,8 @@ export const AddBlog = async (payload: any) => {
     const res = await api.post("/posts", payload);
     return res.data;
 };
+
+export const BlogById = async (id: string) => {
+    const res = await api.get(`/posts/${id}`);
+    return res?.data;
+};

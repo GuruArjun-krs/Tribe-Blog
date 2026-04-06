@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { TourGuideZone } from 'rn-tourguide';
@@ -7,6 +7,8 @@ import { TourGuideZone } from 'rn-tourguide';
 import { Typo } from '@/Components';
 import { COLORS } from '@/Utils/colors';
 import { TabScreens } from '@/Routes/Screen';
+
+const { width } = Dimensions.get('window')
 
 const AppHeader = (props: any) => {
     const { route, options } = props;
@@ -27,7 +29,7 @@ const AppHeader = (props: any) => {
             <View style={{ height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                     {HeaderLeft ? <HeaderLeft /> : null}
-                    <Typo variant='bodyLargeSecondary' title={displayTitle} color={COLORS.white} />
+                    <Typo variant='bodyLargeSecondary' numberOfLines={3} ellipsizeMode='tail' style={{ width: width * 0.7 }} title={displayTitle} color={COLORS.white} />
                 </View>
                 <TourGuideZone zone={2} text={'This is Header Navigations'} shape={'rectangle'}>
                     <View collapsable={false}>
