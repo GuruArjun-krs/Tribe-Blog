@@ -111,7 +111,7 @@ const ProfileScreen = () => {
                     <View style={{ gap: 10, width: ScreenWidth * 0.7, alignItems: 'center' }}>
                         <Typo title='Hello, Writer' variant='titleLargeSecondary' />
                         <Typo title="Log in to share what's on your mind today." color={COLORS.text.disabledSecondary} />
-                        <ButtonComp title='Login' onPress={() => navigation.navigate('Login')} />
+                        <ButtonComp title='Login' onPress={() => navigation.navigate('Login')} style={{ backgroundColor: COLORS.primary[900] }} />
                     </View>
                 )}
             </View>

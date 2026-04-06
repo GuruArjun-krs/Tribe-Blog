@@ -3,17 +3,89 @@ import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom
 
 import { TabScreens } from '@/Routes/Screen';
 import { COLORS } from '@/Utils/colors';
-import { AppIcon } from '@/Components';
+import { AppIcon, Typo } from '@/Components';
 import { TourGuideZone } from 'rn-tourguide';
+import CustomTabBarBackground from './tabBackground';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
+import useFetchLocal from '@/Hooks/useFetchLocal';
 
 const Tab = createBottomTabNavigator();
 
 export const ContextParent = createContext<any>(null);
 
 const BottomTabs = () => {
+    const navigation = useNavigation<any>()
+    const { isLogin } = useFetchLocal();
     const [layoutChange, setLayoutChange] = useState<any>({
         tabBgColor: COLORS.white,
     });
+
+    const renderTabButton = () => {
+        const handlePress = () => {
+            if (isLogin === 'success') {
+                navigation.navigate('BottomTab', { screen: 'AddBlog' });
+            } else {
+                navigation.navigate('Login');
+            }
+        };
+        return (
+            <TouchableOpacity
+                onPress={handlePress}
+                style={{
+                    position: 'absolute',
+                    bottom: 25,
+                    alignSelf: 'center',
+                    backgroundColor: layoutChange.tabBgColor,
+                    width: 60,
+                    height: 60,
+                    borderRadius: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    elevation: 5,
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 3,
+                }}
+            >
+                <AppIcon name='plus' type='Feather' color={COLORS.white} />
+            </TouchableOpacity>
+        );
+    };
+
+    const renderItem = (name: any, type: any, active: boolean, navigation: any, route: { name: string }) => {
+        const screenType = TabScreens.find((el) => el.name === route.name);
+        const handlePress = () => {
+            if (isLogin === 'success') {
+                navigation.navigate(route.name);
+            } else {
+                navigation.navigate('Login');
+            }
+        };
+        return (
+            <TouchableOpacity style={{ alignItems: 'center' }} onPress={handlePress}>
+                <AppIcon
+                    name={name ?? ''}
+                    type={type as any}
+                    size={20}
+                    color={active ? screenType?.focusedColor : screenType?.unFocusedColor}
+                />
+            </TouchableOpacity>
+        );
+    };
+
+    const CustomTabBarLabel = ({ focused, title }: any) => {
+        return (
+            <Typo
+                style={{ fontSize: 10, textAlign: 'center' }}
+                title={title}
+                color={focused ? COLORS.white : COLORS.text.disabled}
+                variant={focused ? 'bodySmallPrimary' : 'bodySmallTertiary'}
+                numberOfLines={2}
+            />
+        );
+    };
 
     return (
         <ContextParent.Provider value={{ layoutChange: layoutChange.tabBgColor, setLayoutChange }}>
@@ -30,21 +102,21 @@ const BottomTabs = () => {
                     tabBarInactiveTintColor: COLORS.text.disabled,
                     tabBarStyle: {
                         backgroundColor: layoutChange.tabBgColor,
-                        borderTopWidth: 1,
-                        borderTopColor: COLORS.text.disabled,
+                        borderTopWidth: 0,
+                        display: 'flex',
                     },
-                    tabBarLabelStyle: {
-                        fontSize: 10,
-                        fontWeight: '500',
+                    tabBarIcon: ({ focused }) => {
+                        let iconName: any;
+                        iconName = TabScreens?.find(el => el?.name === route?.name);
+                        const name = iconName?.iconName;
+                        const type = iconName?.iconType;
+
+                        return renderItem(name, type, focused, navigation, route);
                     },
-                    tabBarIcon: ({ size, focused }) => {
-                        const screenType = TabScreens.find(el => el.name === route.name);
-                        const name = screenType?.iconName;
-                        const type = screenType?.iconType;
-                        return (
-                            <AppIcon name={name ?? ''} type={type as any} size={20} color={focused ? screenType?.focusedColor : screenType?.unFocusedColor} />
-                        );
-                    },
+                    tabBarLabel: ({ focused }) => (
+                        <CustomTabBarLabel focused={focused} title={route?.name} />
+                    ),
+                    tabBarBackground: () => <CustomTabBarBackground />
                 })}
             >
                 {TabScreens?.map((el) => (
@@ -52,6 +124,9 @@ const BottomTabs = () => {
                         key={el?.key}
                         name={el?.name}
                         component={el?.component}
+                        options={{
+                            tabBarButton: el?.name === 'AddBlog' ? () => renderTabButton() : undefined
+                        }}
                     />
                 ))}
             </Tab.Navigator>

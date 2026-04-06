@@ -8,6 +8,7 @@ import { COLORS } from '@/Utils/colors';
 import { LoginScreen, RegisterScreen } from '@/Screens/Auth';
 import EditProfileScreen from '@/Screens/Profile/SubScreen/EditProfile';
 import LikeScreen from '@/Screens/Likes';
+import AddBlog from '@/Screens/AddBlog';
 
 // this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
@@ -74,6 +75,11 @@ export const TabScreens = [
         unFocusedColor: COLORS.text.disabled
     },
     {
+        key: 'addBlog',
+        name: 'AddBlog',
+        component: AddBlog,
+    },
+    {
         key: 'profile',
         name: 'Profile',
         component: ProfileScreen,
@@ -81,5 +87,5 @@ export const TabScreens = [
         iconType: 'Feather',
         focusedColor: COLORS.white,
         unFocusedColor: COLORS.text.disabled
-    }
+    },
 ]
