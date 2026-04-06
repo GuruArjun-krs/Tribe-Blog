@@ -7,24 +7,26 @@ interface ButtonProps {
     onPress: () => void;
     style?: StyleProp<ViewStyle>;
     disabled?: boolean;
+    textColor?: string
 }
 
-const ButtonComp = ({ title, onPress, style, disabled }: ButtonProps) => {
+const ButtonComp = ({ title, onPress, style, disabled, textColor = COLORS.white }: ButtonProps) => {
     return (
         <TouchableOpacity onPress={onPress} disabled={disabled} activeOpacity={0.7} style={[styles.container, style, disabled && { opacity: 0.5 }]}>
-            <Typo title={title} />
+            <Typo title={title} color={textColor} />
         </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
         borderWidth: 1,
-        paddingVertical: 12,
-        paddingHorizontal: 16,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 8,
+        borderRadius: 12,
         borderColor: COLORS.text.disabled,
     },
 });

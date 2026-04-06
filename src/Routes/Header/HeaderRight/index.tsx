@@ -8,9 +8,10 @@ import { COLORS } from '@/Utils/colors'
 interface rightHeaderType {
     isSearch?: boolean
     isProfile?: boolean
+    isLike?: boolean
 }
 
-const RightHeader = ({ isSearch = true, isProfile = true }: rightHeaderType) => {
+const RightHeader = ({ isSearch = true, isProfile = true, isLike = true }: rightHeaderType) => {
     const navigation = useNavigation<any>()
 
     const headerStack = [
@@ -32,6 +33,15 @@ const RightHeader = ({ isSearch = true, isProfile = true }: rightHeaderType) => 
             onPress: () => navigation.navigate('BottomTab', { screen: 'Profile' }),
             display: isProfile
         },
+        {
+            key: 'like',
+            name: 'heart',
+            type: 'Feather' as const,
+            size: 20,
+            color: COLORS.white,
+            onPress: () => navigation.navigate('Like'),
+            display: isLike
+        }
     ]
 
     return (
