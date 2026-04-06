@@ -78,6 +78,9 @@ export const TabScreens = [
         key: 'addBlog',
         name: 'AddBlog',
         component: AddBlog,
+        options: {
+            title: 'Add New Blog'
+        }
     },
     {
         key: 'profile',

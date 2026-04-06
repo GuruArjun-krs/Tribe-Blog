@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { BlogList } from "@/Api/Collections/Blogs";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AddBlog, BlogList, CategoryList } from "@/Api/Collections/Blogs";
 
 export const useBlogList = () => {
     return useQuery({
@@ -8,5 +8,23 @@ export const useBlogList = () => {
             const response = await BlogList()
             return response;
         },
+    })
+}
+
+export const useCategoryList = () => {
+    return useQuery({
+        queryKey: ["CategoryList"],
+        queryFn: async () => {
+            const response = await CategoryList()
+            return response;
+        },
+    })
+}
+
+export const useAddBlog = () => {
+    return useMutation({
+        mutationFn: async (payload: any) => {
+            return await AddBlog(payload)
+        }
     })
 }

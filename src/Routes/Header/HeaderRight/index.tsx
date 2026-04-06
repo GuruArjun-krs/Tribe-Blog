@@ -2,16 +2,18 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { TouchableOpacity, View } from 'react-native'
 
-import { AppIcon } from '@/Components'
+import { AppIcon, Typo } from '@/Components'
 import { COLORS } from '@/Utils/colors'
 
 interface rightHeaderType {
     isSearch?: boolean
     isProfile?: boolean
     isLike?: boolean
+    isPost?: boolean
+    postPress?: () => void
 }
 
-const RightHeader = ({ isSearch = true, isProfile = true, isLike = true }: rightHeaderType) => {
+const RightHeader = ({ isSearch = true, isProfile = true, isLike = true, isPost = false, postPress }: rightHeaderType) => {
     const navigation = useNavigation<any>()
 
     const headerStack = [
@@ -51,6 +53,11 @@ const RightHeader = ({ isSearch = true, isProfile = true, isLike = true }: right
                     <AppIcon name={el?.name} type={el?.type} size={el?.size} color={el?.color} />
                 </TouchableOpacity>
             ))}
+            {isPost && (
+                <TouchableOpacity onPress={postPress}>
+                    <Typo title='Post' color={COLORS.white} variant='bodyMediumSecondary' />
+                </TouchableOpacity>
+            )}
         </View>
     )
 }

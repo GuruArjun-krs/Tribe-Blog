@@ -68,7 +68,6 @@ const LoginScreen = () => {
                     onError: (error: any) => {
                         loginFormik.setFieldError("password", error?.response?.data?.message)
                     }
-
                 }
             )
         }

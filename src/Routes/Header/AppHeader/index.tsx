@@ -6,19 +6,21 @@ import { TourGuideZone } from 'rn-tourguide';
 
 import { Typo } from '@/Components';
 import { COLORS } from '@/Utils/colors';
+import { TabScreens } from '@/Routes/Screen';
 
 const AppHeader = (props: any) => {
     const { route, options } = props;
     const insets = useSafeAreaInsets();
 
     const activeTabName = getFocusedRouteNameFromRoute(route);
-    
-    const displayTitle = activeTabName || options?.title || route.name;
+    const currentTabConfig = TabScreens?.find(el => el.name === activeTabName);
+
+    const displayTitle = currentTabConfig?.options?.title || activeTabName || options?.title || route.name;
 
     const activeOptions = props.options;
     const backgroundColor = activeOptions?.headerStyle?.backgroundColor || COLORS.white;
     const HeaderRight = options?.headerRight;
-    const HeaderLeft = options?.headerLeft;    
+    const HeaderLeft = options?.headerLeft;
 
     return (
         <View style={{ paddingTop: insets.top, backgroundColor: backgroundColor, borderBottomWidth: 1, borderBottomColor: '#eee', paddingLeft: insets.left + 16, paddingRight: insets.right + 16 }}>

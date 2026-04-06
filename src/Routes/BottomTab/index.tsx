@@ -1,13 +1,13 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useCallback, useState } from 'react'
 import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TouchableOpacity } from 'react-native';
+import { TourGuideZone } from 'rn-tourguide';
+import { useNavigation } from '@react-navigation/native';
 
 import { TabScreens } from '@/Routes/Screen';
 import { COLORS } from '@/Utils/colors';
 import { AppIcon, Typo } from '@/Components';
-import { TourGuideZone } from 'rn-tourguide';
-import CustomTabBarBackground from './tabBackground';
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
+import CustomTabBarBackground from '@/Routes/BottomTab/tabBackground';
 import useFetchLocal from '@/Hooks/useFetchLocal';
 
 const Tab = createBottomTabNavigator();
@@ -22,16 +22,9 @@ const BottomTabs = () => {
     });
 
     const renderTabButton = () => {
-        const handlePress = () => {
-            if (isLogin === 'success') {
-                navigation.navigate('BottomTab', { screen: 'AddBlog' });
-            } else {
-                navigation.navigate('Login');
-            }
-        };
         return (
             <TouchableOpacity
-                onPress={handlePress}
+                onPress={() => navigation.navigate('BottomTab', { screen: 'AddBlog' })}
                 style={{
                     position: 'absolute',
                     bottom: 25,
@@ -56,15 +49,8 @@ const BottomTabs = () => {
 
     const renderItem = (name: any, type: any, active: boolean, navigation: any, route: { name: string }) => {
         const screenType = TabScreens.find((el) => el.name === route.name);
-        const handlePress = () => {
-            if (isLogin === 'success') {
-                navigation.navigate(route.name);
-            } else {
-                navigation.navigate('Login');
-            }
-        };
         return (
-            <TouchableOpacity style={{ alignItems: 'center' }} onPress={handlePress}>
+            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => navigation.navigate(route.name)}>
                 <AppIcon
                     name={name ?? ''}
                     type={type as any}
@@ -108,10 +94,7 @@ const BottomTabs = () => {
                     tabBarIcon: ({ focused }) => {
                         let iconName: any;
                         iconName = TabScreens?.find(el => el?.name === route?.name);
-                        const name = iconName?.iconName;
-                        const type = iconName?.iconType;
-
-                        return renderItem(name, type, focused, navigation, route);
+                        return renderItem(iconName?.iconName, iconName?.iconType, focused, navigation, route);
                     },
                     tabBarLabel: ({ focused }) => (
                         <CustomTabBarLabel focused={focused} title={route?.name} />
@@ -124,7 +107,16 @@ const BottomTabs = () => {
                         key={el?.key}
                         name={el?.name}
                         component={el?.component}
+                        listeners={{
+                            tabPress: (e) => {
+                                if (isLogin !== 'success') {
+                                    e.preventDefault();
+                                    navigation.navigate('Login');
+                                }
+                            },
+                        }}
                         options={{
+                            ...el?.options,
                             tabBarButton: el?.name === 'AddBlog' ? () => renderTabButton() : undefined
                         }}
                     />
