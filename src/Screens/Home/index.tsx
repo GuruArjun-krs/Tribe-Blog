@@ -10,6 +10,7 @@ import { RightHeader } from '@/Routes/Header';
 import { ContextParent } from '@/Routes/BottomTab';
 import { AppIcon, Typo } from '@/Components';
 import { useBlogList } from '@/Api/Hooks/BlogHook';
+import useDoubleBackExit from '@/Hooks/useExitApp';
 
 const HomeScreen = () => {
     const navigation = useNavigation<any>()
@@ -17,7 +18,8 @@ const HomeScreen = () => {
     const layoutContext = useContext(ContextParent);
     const { setLayoutChange } = layoutContext;
     const { data: BlogList } = useBlogList()
-    console.log(BlogList?.data, 'BlogList?.data');
+
+    useDoubleBackExit()
 
     useLayoutEffect(() => {
         const parent = navigation.getParent();
