@@ -55,6 +55,7 @@ const HomeScreen = () => {
 
     const BlogCard = memo(({ item }: any) => (
         <View style={{ backgroundColor: COLORS.secondary[50], borderRadius: 12, borderWidth: 1, borderColor: COLORS.primary[200] }}>
+            {console.log(item, 'item')}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                     <View style={{ width: 30, height: 30 }}>
@@ -75,12 +76,21 @@ const HomeScreen = () => {
             </View>
             <Image source={{ uri: item?.image }} style={{ width: '100%', height: 180, backgroundColor: '#e1e1e1' }} />
             <View style={{ padding: 14, gap: 8 }}>
-                <Typo title={item?.title} variant='bodyLargeSecondary' />
-                <Typo title={item?.content} numberOfLines={2} ellipsizeMode='tail' variant='bodyMediumTertiary' />
-                <TouchableOpacity onPress={() => navigation.navigate('BlogDetails', { id: item._id })} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4, justifyContent: 'flex-end' }}>
-                    <Typo title="Continue Reading" variant='bodySmallPrimary' color={COLORS.primary[100]} />
-                    <AppIcon name='chevron-right' type='Feather' color={COLORS.black} size={14} />
-                </TouchableOpacity>
+                <View style={{ borderWidth: 1, padding: 12, borderRadius: 8, borderColor: COLORS.pink }}>
+                    <Typo title={item?.title} variant='bodyLargeSecondary' />
+                    <Typo title={item?.content} numberOfLines={2} ellipsizeMode='tail' variant='bodyMediumTertiary' />
+                </View>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <AppIcon name={'heart'} type={'FontAwesome6'} size={16} color={COLORS.hotPink} />
+                        <Typo title='Favorite' variant='bodySmallTertiary' color={COLORS.hotPink} />
+                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate('BlogDetails', { id: item._id })} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Typo title="Continue Reading" variant='bodySmallPrimary' color={COLORS.primary[100]} />
+                        <AppIcon name='chevron-right' type='Feather' color={COLORS.black} size={14} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     ));
