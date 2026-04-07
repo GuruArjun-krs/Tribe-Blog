@@ -11,6 +11,7 @@ import LikeScreen from '@/Screens/Likes';
 import AddBlog from '@/Screens/AddBlog';
 import BlogDetails from '@/Screens/Home/SubScreen/BlogDetail';
 import Logout from '@/Screens/Profile/SubScreen/Logout';
+import CardMenu from '@/Screens/Home/SubScreen/CardMenu';
 
 // this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
@@ -61,7 +62,7 @@ export const StackScreens = [
         name: 'Like',
         component: LikeScreen,
         options: {
-            title: "Let's see who liked"
+            title: "My Favorite Blogs!"
         }
     },
     {
@@ -73,6 +74,12 @@ export const StackScreens = [
         key: 'logout',
         name: 'Logout',
         component: Logout,
+        options: options
+    },
+    {
+        key: 'cardOptions',
+        name: 'CardOptions',
+        component: CardMenu,
         options: options
     }
 ]

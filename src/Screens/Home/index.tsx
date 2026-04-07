@@ -1,7 +1,7 @@
-import React, { memo, useContext, useEffect, useLayoutEffect } from 'react'
-import { TourGuideZone, useTourGuideController } from 'rn-tourguide';
+import React, { memo, useContext, useLayoutEffect } from 'react'
+import { useTourGuideController } from 'rn-tourguide';
 import { useNavigation } from '@react-navigation/native'
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, TouchableOpacity, View } from 'react-native'
 import moment from 'moment';
 
 import { PrimaryLayout } from '@/Layout';
@@ -11,9 +11,11 @@ import { ContextParent } from '@/Routes/BottomTab';
 import { AppIcon, Typo } from '@/Components';
 import { useBlogList } from '@/Api/Hooks/BlogHook';
 import useDoubleBackExit from '@/Hooks/useExitApp';
+import useFetchLocal from '@/Hooks/useFetchLocal';
 
 const HomeScreen = () => {
     const navigation = useNavigation<any>()
+    const { isLogin } = useFetchLocal();
     const { start, canStart } = useTourGuideController();
     const layoutContext = useContext(ContextParent);
     const { setLayoutChange } = layoutContext;
@@ -53,15 +55,23 @@ const HomeScreen = () => {
 
     const BlogCard = memo(({ item }: any) => (
         <View style={{ backgroundColor: COLORS.secondary[50], borderRadius: 12, borderWidth: 1, borderColor: COLORS.primary[200] }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12 }}>
-                <View style={{ width: 30, height: 30 }}>
-                    <Image source={{ uri: item?.image }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
-                </View>
-                <View style={{ flexDirection: 'column' }}>
-                    <Typo variant='bodyLargeSecondary' title={item?.createdBy?.name} />
-                    <Typo title={moment(item?.updatedAt).format("MMM D, YYYY")} />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <View style={{ width: 30, height: 30 }}>
+                        <Image source={{ uri: item?.image }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
+                    </View>
+                    <View style={{ flexDirection: 'column' }}>
+                        <Typo variant='bodyLargeSecondary' title={item?.createdBy?.name} />
+                        <Typo title={moment(item?.updatedAt).format("MMM D, YYYY")} />
 
+                    </View>
                 </View>
+
+                {isLogin === 'success' && (
+                    <TouchableOpacity style={{ borderWidth: 1, padding: 8, borderRadius: 40, borderColor: COLORS.primary[200] }} onPress={() => navigation.navigate('CardOptions', { data: item })}>
+                        <AppIcon name='dots-three-vertical' type='Entypo' size={14} />
+                    </TouchableOpacity>
+                )}
             </View>
             <Image source={{ uri: item?.image }} style={{ width: '100%', height: 180, backgroundColor: '#e1e1e1' }} />
             <View style={{ padding: 14, gap: 8 }}>

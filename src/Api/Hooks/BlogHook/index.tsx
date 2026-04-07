@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddBlog, BlogById, BlogList, CategoryList, MyBlogs } from "@/Api/Collections/Blogs";
+import { AddBlog, AddFavorite, BlogById, BlogList, CategoryList, DeleteBlog, MyBlogs, MyFavorites } from "@/Api/Collections/Blogs";
 
 export const useBlogList = () => {
     return useQuery({
@@ -44,6 +44,32 @@ export const useMyBlogs = () => {
         queryKey: ["myBlogs"],
         queryFn: async () => {
             const response = await MyBlogs()
+            return response;
+        },
+    })
+}
+
+export const useAddFavorite = () => {
+    return useMutation({
+        mutationFn: async (id: any) => {
+            return await AddFavorite(id)
+        }
+    })
+}
+
+export const useDeleteBlog = () => {
+    return useMutation({
+        mutationFn: async (id: any) => {
+            return await DeleteBlog(id)
+        }
+    })
+}
+
+export const useMyFavorites = () => {
+    return useQuery({
+        queryKey: ["myFavorites"],
+        queryFn: async () => {
+            const response = await MyFavorites()
             return response;
         },
     })

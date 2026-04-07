@@ -1,6 +1,6 @@
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { Dimensions, FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { PrimaryLayout } from '@/Layout';
 import { AppIcon, ButtonComp, Typo } from '@/Components';
@@ -9,7 +9,7 @@ import { ContextParent } from '@/Routes/BottomTab';
 import { HeaderLeft } from '@/Routes/Header';
 import useFetchLocal from '@/Hooks/useFetchLocal';
 import { useUserProfile } from '@/Api/Hooks/UserHook';
-import { useMyBlogs } from '@/Api/Hooks/BlogHook';
+import { useMyBlogs, useMyFavorites } from '@/Api/Hooks/BlogHook';
 
 const { width: ScreenWidth } = Dimensions.get('window')
 const COLUMN_SIZE = ScreenWidth / 3;
@@ -21,6 +21,9 @@ const ProfileScreen = () => {
     const { isLogin, userId } = useFetchLocal();
     const { data: userProfile } = useUserProfile({ id: userId })
     const { data: myBlogList } = useMyBlogs()
+    const { data: FavoriteBlog } = useMyFavorites()
+
+    console.log(userProfile, 'userProfile', myBlogList, FavoriteBlog);
 
     useLayoutEffect(() => {
         const parent = navigation.getParent();
@@ -57,17 +60,15 @@ const ProfileScreen = () => {
                 <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: COLORS.primary[700], borderWidth: 2, borderColor: COLORS.primary[400] }}>
                     <Image source={{ uri: userProfile?.data?.profileImg }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
                 </View>
-                <View style={{ alignItems: 'center' }}>
-                    <Typo title={myBlogList?.count?.toString()} variant="bodyMediumSecondary" />
-                    <Typo title="Posts" variant="bodyMediumTertiary" />
-                </View>
-                <View style={{ alignItems: 'center' }}>
-                    <Typo title="1.2k" variant="bodyMediumSecondary" />
-                    <Typo title="Followers" variant="bodyMediumTertiary" />
-                </View>
-                <View style={{ alignItems: 'center' }}>
-                    <Typo title="150" variant="bodyMediumSecondary" />
-                    <Typo title="Following" variant="bodyMediumTertiary" />
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 50 }}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Typo title={myBlogList?.count?.toString()} variant="bodyMediumSecondary" />
+                        <Typo title="Posts" variant="bodyMediumTertiary" />
+                    </View>
+                    <View style={{ alignItems: 'center' }}>
+                        <Typo title={FavoriteBlog?.count?.toString() || '0'} variant="bodyMediumSecondary" />
+                        <Typo title="Favorites" variant="bodyMediumTertiary" />
+                    </View>
                 </View>
             </View>
 
@@ -117,12 +118,19 @@ const ProfileScreen = () => {
 
     const renderNoData = () => {
         return (
-            <View style={{ justifyContent: 'center', alignItems: 'center', padding: 16, gap: 20 }}>
-                <Typo title='Post your First Story' color='red' variant='titleMediumSecondary' />
-                <ButtonComp title='Write My First Story' style={{ backgroundColor: COLORS.primary[900] }} onPress={() => navigation.navigate('BottomTab', { screen: 'AddBlog' })} />
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40, gap: 15 }}>
+                <View style={{ width: 80, height: 80, borderRadius: 40, borderWidth: 2, borderColor: COLORS.primary[500], justifyContent: 'center', alignItems: 'center' }}>
+                    <AppIcon name='blogger' type='Zocial' color={COLORS.primary[500]} />
+                </View>
+                <Typo title='Share Blogs' variant='titleLargePrimary' />
+                <Typo title='When you share blogs, they will appear on your profile.' color={COLORS.text.secondary} variant='bodyMediumSecondary' style={{ textAlign: 'center' }} />
+
+                <TouchableOpacity onPress={() => navigation.navigate('BottomTab', { screen: 'AddBlog' })}>
+                    <Typo title='Share your first blog' color={COLORS.primary[500]} variant='bodyMediumTertiary' />
+                </TouchableOpacity>
             </View>
-        )
-    }
+        );
+    };
 
     return (
         <PrimaryLayout bgColor={COLORS.primary[900]}>
@@ -151,3 +159,42 @@ const ProfileScreen = () => {
 }
 
 export default ProfileScreen
+
+const styles = StyleSheet.create({
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 40,
+        marginTop: 50,
+    },
+    iconCircle: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: '#262626',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    mainTitle: {
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#000',
+        marginBottom: 8,
+        textAlign: 'center',
+    },
+    subText: {
+        fontSize: 14,
+        color: '#8e8e8e', // Classic IG muted gray
+        textAlign: 'center',
+        lineHeight: 18,
+        marginBottom: 15,
+    },
+    linkText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#0095f6', // Instagram "Action" Blue
+    },
+});

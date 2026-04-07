@@ -8,6 +8,8 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialDesignIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
+import Zocial from 'react-native-vector-icons/Zocial'
 
 export const IconSets = {
     MaterialIcons,
@@ -20,4 +22,6 @@ export const IconSets = {
     MaterialDesignIcons,
     FontAwesome,
     Octicons,
+    FontAwesome6,
+    Zocial
 };
