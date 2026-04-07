@@ -19,11 +19,12 @@ interface SelectDropdownProps {
     label?: string
     isMandatory?: boolean
     containerStyle?: any
+    error?: any
 }
 
 const { width } = Dimensions.get('window')
 
-const SelectDropdownComp = ({ options, placeholder = 'Select', onSelect, value, buttonStyle, search, label, isMandatory, containerStyle }: SelectDropdownProps) => {
+const SelectDropdownComp = ({ options, placeholder = 'Select', onSelect, value, buttonStyle, search, label, isMandatory, containerStyle, error }: SelectDropdownProps) => {
     const selectedValue = options?.find(item => item?.title === value) || null;
 
     return (
@@ -50,7 +51,7 @@ const SelectDropdownComp = ({ options, placeholder = 'Select', onSelect, value, 
                 onSelect={onSelect}
                 renderButton={(selectedItem, isOpened) => {
                     return (
-                        <View style={[styles.dropdownButtonStyle, buttonStyle]}>
+                        <View style={[styles.dropdownButtonStyle, { borderColor: error ? COLORS.status.error : COLORS.text.disabled, }, buttonStyle]}>
                             <Typo numberOfLines={1} ellipsizeMode='tail' style={{ fontSize: 14, color: (placeholder && !selectedItem?.title) ? COLORS.text.disabled : COLORS.text[400] }} title={selectedItem?.title || placeholder} />
                             <AppIcon name={isOpened ? 'chevron-up' : 'chevron-down'} type="Feather" size={14} color={COLORS.black} />
                         </View>
@@ -66,6 +67,9 @@ const SelectDropdownComp = ({ options, placeholder = 'Select', onSelect, value, 
                 showsVerticalScrollIndicator={false}
                 dropdownStyle={{ backgroundColor: COLORS.white, borderRadius: 8, marginTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 0) : 0 }}
             />
+            {error && (
+                <Typo variant="bodySmallTertiary" title={error} color={COLORS.status.error} style={{ paddingLeft: 4 }} />
+            )}
         </View>
     )
 }
@@ -82,7 +86,6 @@ const styles = StyleSheet.create({
         gap: 10,
         justifyContent: 'space-between',
         borderWidth: 1,
-        borderColor: COLORS.text.disabled,
     },
     dropdownItemStyle: {
         width: '100%',

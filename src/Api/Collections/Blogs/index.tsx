@@ -5,11 +5,6 @@ export const BlogList = async () => {
     return res?.data;
 };
 
-export const CategoryList = async () => {
-    const res = await api.get("/categories");
-    return res?.data;
-};
-
 export const AddBlog = async (payload: any) => {
     const res = await api.post("/posts", payload);
     return res.data;
