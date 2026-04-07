@@ -15,7 +15,7 @@ import useFetchLocal from '@/Hooks/useFetchLocal';
 
 const HomeScreen = () => {
     const navigation = useNavigation<any>()
-    const { isLogin } = useFetchLocal();
+    const { isLogin, userId } = useFetchLocal();
     const { start, canStart } = useTourGuideController();
     const layoutContext = useContext(ContextParent);
     const { setLayoutChange } = layoutContext;
@@ -55,7 +55,6 @@ const HomeScreen = () => {
 
     const BlogCard = memo(({ item }: any) => (
         <View style={{ backgroundColor: COLORS.secondary[50], borderRadius: 12, borderWidth: 1, borderColor: COLORS.primary[200] }}>
-            {console.log(item, 'item')}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                     <View style={{ width: 30, height: 30 }}>
@@ -82,10 +81,14 @@ const HomeScreen = () => {
                 </View>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                        <AppIcon name={'heart'} type={'FontAwesome6'} size={16} color={COLORS.hotPink} />
-                        <Typo title='Favorite' variant='bodySmallTertiary' color={COLORS.hotPink} />
-                    </View>
+                    {item?.favorites?.includes(userId) ? (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                            <AppIcon name={'heart'} type={'FontAwesome6'} size={16} color={COLORS.hotPink} />
+                            <Typo title='Favorite' variant='bodySmallTertiary' color={COLORS.hotPink} />
+                        </View>
+                    ) : (
+                        <View />
+                    )}
                     <TouchableOpacity onPress={() => navigation.navigate('BlogDetails', { id: item._id })} style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Typo title="Continue Reading" variant='bodySmallPrimary' color={COLORS.primary[100]} />
                         <AppIcon name='chevron-right' type='Feather' color={COLORS.black} size={14} />

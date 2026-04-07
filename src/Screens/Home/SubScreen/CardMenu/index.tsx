@@ -18,20 +18,20 @@ const CardMenu = ({ route }: any) => {
 
     const options = [
         {
-            id: 'user',
-            Label: 'Visit Profile',
-            icon: <AppIcon name='user' type='Feather' size={16} color={COLORS.purple} />
-        },
-        {
             id: 'favorite',
             Label: isFavorited ? 'Remove from Favorite' : 'Add to Favorite',
             icon: <AppIcon name={isFavorited ? 'heart-crack' : 'heart'} type={isFavorited ? 'FontAwesome6' : 'FontAwesome'} size={16} color={COLORS.hotPink} />
         },
-        ...(isMyPost ? [{
-            id: 'delete',
-            Label: 'Delete',
-            icon: <AppIcon name='trash' type='Feather' size={16} color={COLORS.status.error} />
-        }] : [])
+        ...(isMyPost ? [
+            {
+                id: 'delete',
+                Label: 'Delete',
+                icon: <AppIcon name='trash' type='Feather' size={16} color={COLORS.status.error} />
+            }] : [{
+                id: 'user',
+                Label: 'Visit Profile',
+                icon: <AppIcon name='user' type='Feather' size={16} color={COLORS.purple} />
+            }])
     ]
 
     const handleAction = (key: string) => {
@@ -60,7 +60,7 @@ const CardMenu = ({ route }: any) => {
                 }
             })
         } else {
-            navigation.navigate('BottomTab', { screen: 'Profile', params: { id: data?.createdBy?._id } })
+            navigation.navigate('BloggerProfile', { id: data?.createdBy?._id })
         }
     }
 

@@ -39,3 +39,8 @@ export const MyFavorites = async () => {
     const res = await api.get(`/posts/favorites/me`);
     return res?.data;
 };
+
+export const BloggerPostById = async (id: any) => {
+    const res = await api.get(`/posts/user/${id}`);
+    return res?.data;
+};

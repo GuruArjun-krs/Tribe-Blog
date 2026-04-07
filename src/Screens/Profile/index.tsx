@@ -23,8 +23,6 @@ const ProfileScreen = () => {
     const { data: myBlogList } = useMyBlogs()
     const { data: FavoriteBlog } = useMyFavorites()
 
-    console.log(userProfile, 'userProfile', myBlogList, FavoriteBlog);
-
     useLayoutEffect(() => {
         const parent = navigation.getParent();
         const focusUnsubscribe = navigation.addListener('focus', () => {
