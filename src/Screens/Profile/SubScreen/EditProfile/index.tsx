@@ -7,8 +7,8 @@ import { HeaderLeft } from '@/Routes/Header'
 import { COLORS } from '@/Utils/colors'
 import useFetchLocal from '@/Hooks/useFetchLocal'
 import { useFormik } from 'formik'
-import { useUserProfile, useUserProfileUpdate } from '@/Api/Hooks/UserHook'
-import { ButtonComp, SelectDropdownComp, TextInput } from '@/Components'
+import { useUserProfile, useUserProfileImageUpdate, useUserProfileUpdate } from '@/Api/Hooks/UserHook'
+import { ButtonComp, ImagePicker, SelectDropdownComp, TextInput } from '@/Components'
 import { showToast } from '@/Utils/toastHelper'
 
 const EditProfileScreen = () => {
@@ -16,6 +16,7 @@ const EditProfileScreen = () => {
     const { userId } = useFetchLocal();
     const { data: userProfile } = useUserProfile({ id: userId })
     const { mutate: updateProfile } = useUserProfileUpdate();
+    const { mutate: imageUpdate } = useUserProfileImageUpdate()
 
     useLayoutEffect(() => {
         const focusUnsubscribe = navigation.addListener('focus', () => {
@@ -47,35 +48,67 @@ const EditProfileScreen = () => {
             gender: userProfile?.data?.gender || '',
             dob: userProfile?.data?.dob || '',
             email: userProfile?.data?.email || '',
-            profileImg: userProfile?.data?.profileImg || '',
+            profileImg: userProfile?.data?.profileImg || null,
         },
         enableReinitialize: true,
         onSubmit: values => {
-            updateProfile({ payload: values, id: userId }, {
+            console.log(values, 'values');
+            imageUpdate(values?.profileImg, {
                 onSuccess: (data) => {
+                    console.log(data, '---------');
                     if (data?.success) {
-                        showToast('success', 'Profile updated successfully.')
-                        navigation.reset({
-                            index: 0,
-                            routes: [
-                                {
-                                    name: 'BottomTab',
-                                    params: { screen: 'Profile' },
-                                },
-                            ],
+                        const newPayload = {
+                            name: values?.name,
+                            nickname: values?.nickname || '',
+                            bio: values?.bio || '',
+                            gender: values?.gender || '',
+                            dob: values?.dob || '',
+                            email: values?.email || '',
+                            profileImg: data?.data?.profileImg || null,
+                        }
+                        updateProfile({ payload: newPayload, id: userId }, {
+                            onSuccess: (data) => {
+                                if (data?.success) {
+                                    showToast('success', 'Profile updated successfully.')
+                                    navigation.reset({
+                                        index: 0,
+                                        routes: [
+                                            {
+                                                name: 'BottomTab',
+                                                params: { screen: 'Profile' },
+                                            },
+                                        ],
+                                    });
+                                }
+                            },
+                            onError: (error) => {
+                                console.error('Update failed:', error);
+                            }
                         });
                     }
+
                 },
-                onError: (error) => {
-                    console.error('Update failed:', error);
+                onError: (error: any) => {
+                    const serverMessage = error?.response?.data?.message;
+
+                    if (serverMessage) {
+                        console.log("Validation Error:", serverMessage);
+                    } else {
+                        console.log("Generic Error:", error.message);
+                    }
                 }
-            });
+            })
         }
     })
 
     return (
         <PrimaryLayout bgColor={COLORS.secondary[700]}>
             <View style={{ flex: 1, padding: 16, gap: 16 }}>
+                <ImagePicker
+                    image={profileFormik.values.profileImg}
+                    onImagePrepared={(val: any) => profileFormik.setFieldValue('profileImg', val)}
+                    onClear={() => profileFormik.setFieldValue('profileImg', null)}
+                />
                 <TextInput
                     value={profileFormik.values.name}
                     onChangeText={profileFormik.handleChange('name')}

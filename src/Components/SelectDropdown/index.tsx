@@ -25,7 +25,7 @@ interface SelectDropdownProps {
 const { width } = Dimensions.get('window')
 
 const SelectDropdownComp = ({ options, placeholder = 'Select', onSelect, value, buttonStyle, search, label, isMandatory, containerStyle, error }: SelectDropdownProps) => {
-    const selectedValue = options?.find(item => item?.title === value) || null;
+    const selectedValue = options?.find(item => item?.title === value || item?.id === value) || null;
 
     return (
         <View style={[{ width: '100%', gap: 8 }, containerStyle]}>
@@ -40,7 +40,6 @@ const SelectDropdownComp = ({ options, placeholder = 'Select', onSelect, value, 
                 </View>
             )}
             <SelectDropdown
-                key={value}
                 statusBarTranslucent
                 data={options}
                 defaultValue={selectedValue}
