@@ -24,7 +24,13 @@ const BottomTabs = () => {
     const renderTabButton = () => {
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate('BottomTab', { screen: 'AddBlog' })}
+                onPress={() => {
+                    if (isLogin === 'success') {
+                        navigation.navigate('BottomTab', { screen: 'AddBlog' })
+                    } else {
+                        navigation.navigate('Login')
+                    }
+                }}
                 style={{
                     position: 'absolute',
                     bottom: 25,

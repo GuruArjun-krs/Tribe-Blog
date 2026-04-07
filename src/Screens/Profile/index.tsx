@@ -1,14 +1,15 @@
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { Dimensions, FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { PrimaryLayout } from '@/Layout';
-import { ButtonComp, Typo } from '@/Components';
+import { AppIcon, ButtonComp, Typo } from '@/Components';
 import { COLORS } from '@/Utils/colors';
 import { ContextParent } from '@/Routes/BottomTab';
 import { HeaderLeft } from '@/Routes/Header';
 import useFetchLocal from '@/Hooks/useFetchLocal';
 import { useUserProfile } from '@/Api/Hooks/UserHook';
+import { useMyBlogs, useMyFavorites } from '@/Api/Hooks/BlogHook';
 
 const { width: ScreenWidth } = Dimensions.get('window')
 const COLUMN_SIZE = ScreenWidth / 3;
@@ -19,13 +20,15 @@ const ProfileScreen = () => {
     const { setLayoutChange } = layoutContext;
     const { isLogin, userId } = useFetchLocal();
     const { data: userProfile } = useUserProfile({ id: userId })
-    const [posts] = useState(new Array(12).fill({ id: Math.random() }));
+    const { data: myBlogList } = useMyBlogs()
+    const { data: FavoriteBlog } = useMyFavorites()
 
     useLayoutEffect(() => {
         const parent = navigation.getParent();
         const focusUnsubscribe = navigation.addListener('focus', () => {
             parent?.setOptions({
                 headerStyle: { backgroundColor: COLORS.primary[900] },
+                title: 'My Profile',
                 headerLeft: () => (
                     <HeaderLeft onPress={() => navigation.navigate('BottomTab', { screen: 'Home' })} />
                 )
@@ -38,7 +41,8 @@ const ProfileScreen = () => {
         const blurUnsubscribe = navigation.addListener('blur', () => {
             parent?.setOptions({
                 headerStyle: { backgroundColor: COLORS.white },
-                headerLeft: null
+                headerLeft: null,
+                title: null
             });
         });
 
@@ -54,28 +58,38 @@ const ProfileScreen = () => {
                 <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: COLORS.primary[700], borderWidth: 2, borderColor: COLORS.primary[400] }}>
                     <Image source={{ uri: userProfile?.data?.profileImg }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
                 </View>
-                <View style={{ alignItems: 'center' }}>
-                    <Typo title={posts?.length?.toString()} variant="bodyMediumSecondary" />
-                    <Typo title="Posts" variant="bodyMediumTertiary" />
-                </View>
-                <View style={{ alignItems: 'center' }}>
-                    <Typo title="1.2k" variant="bodyMediumSecondary" />
-                    <Typo title="Followers" variant="bodyMediumTertiary" />
-                </View>
-                <View style={{ alignItems: 'center' }}>
-                    <Typo title="150" variant="bodyMediumSecondary" />
-                    <Typo title="Following" variant="bodyMediumTertiary" />
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 50 }}>
+                    <View style={{ alignItems: 'center' }}>
+                        <Typo title={myBlogList?.count?.toString()} variant="bodyMediumSecondary" />
+                        <Typo title="Posts" variant="bodyMediumTertiary" />
+                    </View>
+                    <View style={{ alignItems: 'center' }}>
+                        <Typo title={FavoriteBlog?.count?.toString() || '0'} variant="bodyMediumSecondary" />
+                        <Typo title="Favorites" variant="bodyMediumTertiary" />
+                    </View>
                 </View>
             </View>
 
             <View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                     <Typo title={userProfile?.data?.name} variant="bodyMediumSecondary" />
-                    <Typo title={userProfile?.data?.gender === "Male" ? "(He / Him)" : userProfile?.data?.gender === "Female" ? "(She / Her)" : ""} variant="bodyMediumSecondary" color={COLORS.text[300]} />
+                    {userProfile?.data?.gender && (
+                        <Typo title={userProfile?.data?.gender === "Male" ? "(He / Him)" : userProfile?.data?.gender === "Female" ? "(She / Her)" : ""} variant="bodyMediumSecondary" color={COLORS.text[300]} />
+                    )}
 
                 </View>
-                <Typo title={userProfile?.data?.nickname} color={COLORS.text.disabledSecondary} variant="bodySmallTertiary" />
-                <Typo title={userProfile?.data?.bio} variant="bodyMediumTertiary" />
+                {userProfile?.data?.nickname && (
+                    <Typo title={userProfile?.data?.nickname} color={COLORS.text.disabledSecondary} variant="bodySmallTertiary" />
+                )}
+                {userProfile?.data?.bio && (
+                    <Typo title={userProfile?.data?.bio} variant="bodyMediumTertiary" />
+                )}
+                {(!userProfile?.data?.bio || !userProfile?.data?.bio) && (
+                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }} onPress={() => navigation.navigate('EditProfile')}>
+                        <Typo title='Complete your Profile' color={COLORS.text.secondary} variant='bodySmallTertiary' />
+                        <AppIcon name='chevron-right' type='Feather' size={12} />
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -89,22 +103,45 @@ const ProfileScreen = () => {
         </View>
     );
 
-    const renderPostItem = () => (
-        <TouchableOpacity style={{ width: COLUMN_SIZE, height: COLUMN_SIZE, borderWidth: 0.5, borderColor: COLORS.primary[900] }}>
-            <View style={{ flex: 1, backgroundColor: COLORS.primary[800] }} />
+    const renderPostItem = ({ item }: any) => (
+        <TouchableOpacity style={{ width: COLUMN_SIZE, height: COLUMN_SIZE, borderWidth: 0.5, borderColor: COLORS.primary[900] }} onPress={() => navigation.navigate('BlogDetails', { id: item?._id })}>
+            <View style={{ flex: 1, backgroundColor: COLORS.primary[800], position: 'relative' }}>
+                <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%' }} />
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
+                    <Typo title={item?.title} style={{ backgroundColor: COLORS.white, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 4 }} />
+                </View>
+            </View>
         </TouchableOpacity>
     );
 
+    const renderNoData = () => {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40, gap: 15 }}>
+                <View style={{ width: 80, height: 80, borderRadius: 40, borderWidth: 2, borderColor: COLORS.primary[500], justifyContent: 'center', alignItems: 'center' }}>
+                    <AppIcon name='blogger' type='Zocial' color={COLORS.primary[500]} />
+                </View>
+                <Typo title='Share Blogs' variant='titleLargePrimary' />
+                <Typo title='When you share blogs, they will appear on your profile.' color={COLORS.text.secondary} variant='bodyMediumSecondary' style={{ textAlign: 'center' }} />
+
+                <TouchableOpacity onPress={() => navigation.navigate('BottomTab', { screen: 'AddBlog' })}>
+                    <Typo title='Share your first blog' color={COLORS.primary[500]} variant='bodyMediumTertiary' />
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
     return (
         <PrimaryLayout bgColor={COLORS.primary[900]}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flex: 1 }}>
                 {isLogin === 'success' ? (
                     <FlatList
-                        data={posts}
+                        data={myBlogList?.data || []}
                         renderItem={renderPostItem}
+                        ListEmptyComponent={renderNoData}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={3}
                         ListHeaderComponent={ProfileHeader}
+                        contentContainerStyle={{ flexGrow: 1 }}
                         showsVerticalScrollIndicator={false}
                     />
                 ) : (
@@ -120,3 +157,42 @@ const ProfileScreen = () => {
 }
 
 export default ProfileScreen
+
+const styles = StyleSheet.create({
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 40,
+        marginTop: 50,
+    },
+    iconCircle: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: '#262626',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    mainTitle: {
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#000',
+        marginBottom: 8,
+        textAlign: 'center',
+    },
+    subText: {
+        fontSize: 14,
+        color: '#8e8e8e', // Classic IG muted gray
+        textAlign: 'center',
+        lineHeight: 18,
+        marginBottom: 15,
+    },
+    linkText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#0095f6', // Instagram "Action" Blue
+    },
+});

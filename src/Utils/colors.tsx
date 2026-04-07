@@ -56,5 +56,6 @@ export const COLORS = {
     white: '#FFFFFF',
     hotPink: '#FF69B4',
     purple: '#800080',
-    pink: '#A83269'
+    pink: '#A83269',
+    lemonYellow: '#F59127'
 };
