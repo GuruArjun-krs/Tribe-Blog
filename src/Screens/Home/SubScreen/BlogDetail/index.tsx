@@ -3,13 +3,15 @@ import { PrimaryLayout } from '@/Layout'
 import { ScrollView, View } from 'react-native'
 import { useBlogById } from '@/Api/Hooks/BlogHook'
 import { useNavigation } from '@react-navigation/native'
-import { HeaderLeft } from '@/Routes/Header'
+import { HeaderLeft, RightHeader } from '@/Routes/Header'
 import { COLORS } from '@/Utils/colors'
 import { Typo } from '@/Components'
 import moment from 'moment'
+import useFetchLocal from '@/Hooks/useFetchLocal'
 
 const BlogDetails = ({ route }: any) => {
     const { id } = route?.params
+    const { userId } = useFetchLocal()
     const navigation = useNavigation<any>()
     const { data: BlogDetail } = useBlogById(id)
 
@@ -20,6 +22,9 @@ const BlogDetails = ({ route }: any) => {
             headerLeft: () => (
                 <HeaderLeft onPress={() => navigation.goBack()} />
             ),
+            headerRight: () => (
+                <RightHeader isLike={false} isProfile={false} isUpdate={BlogDetail?.data?.createdBy?._id === userId} isSearch={false} />
+            )
         });
         const focusUnsubscribe = navigation.addListener('focus', () => {
             if (BlogDetail?.data) {
@@ -29,6 +34,9 @@ const BlogDetails = ({ route }: any) => {
                     headerLeft: () => (
                         <HeaderLeft onPress={() => navigation.goBack()} />
                     ),
+                    headerRight: () => (
+                        <RightHeader isLike={false} isProfile={false} isUpdate={BlogDetail?.data?.createdBy?._id === userId} isSearch={false} />
+                    )
                 });
             } else {
                 navigation.setOptions({
@@ -40,7 +48,8 @@ const BlogDetails = ({ route }: any) => {
             navigation?.setOptions({
                 headerStyle: { backgroundColor: COLORS.white },
                 headerLeft: null,
-                title: null
+                title: null,
+                headerRight: null
             });
         });
 
