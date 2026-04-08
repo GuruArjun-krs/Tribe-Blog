@@ -6,6 +6,8 @@ import GlobalLoader from "@/Components/GlobalLoader";
 import TextInput from "@/Components/TextInput";
 import SelectDropdownComp from "@/Components/SelectDropdown";
 import Toast from "@/Components/Toast"
+import ImagePicker from "@/Components/UploadMedia";
+import Checkbox from "@/Components/Checkbox";
 
 export {
     Typo,
@@ -15,5 +17,7 @@ export {
     GlobalLoader,
     TextInput,
     SelectDropdownComp,
-    Toast
+    Toast,
+    ImagePicker,
+    Checkbox
 }

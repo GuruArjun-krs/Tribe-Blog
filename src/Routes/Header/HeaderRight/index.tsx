@@ -11,9 +11,11 @@ interface rightHeaderType {
     isLike?: boolean
     isPost?: boolean
     postPress?: () => void
+    isUpdate?: boolean
+    onUpdatePress?: () => void
 }
 
-const RightHeader = ({ isSearch = true, isProfile = true, isLike = true, isPost = false, postPress }: rightHeaderType) => {
+const RightHeader = ({ isSearch = true, isProfile = true, isLike = true, isPost = false, postPress, isUpdate, onUpdatePress }: rightHeaderType) => {
     const navigation = useNavigation<any>()
 
     const headerStack = [
@@ -56,6 +58,11 @@ const RightHeader = ({ isSearch = true, isProfile = true, isLike = true, isPost 
             {isPost && (
                 <TouchableOpacity onPress={postPress}>
                     <Typo title='Post' color={COLORS.white} variant='bodyMediumSecondary' />
+                </TouchableOpacity>
+            )}
+            {isUpdate && (
+                <TouchableOpacity onPress={onUpdatePress}>
+                    <Typo title='Update' color={COLORS.white} variant='bodyMediumSecondary' />
                 </TouchableOpacity>
             )}
         </View>

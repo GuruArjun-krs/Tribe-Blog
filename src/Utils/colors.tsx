@@ -57,5 +57,6 @@ export const COLORS = {
     hotPink: '#FF69B4',
     purple: '#800080',
     pink: '#A83269',
-    lemonYellow: '#F59127'
+    lemonYellow: '#F59127',
+    editBlog: '#AA4B89'
 };

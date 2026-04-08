@@ -1,15 +1,17 @@
 import React, { useContext, useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useFormik } from 'formik'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, TouchableOpacity, View } from 'react-native'
 
-import { useAddBlog, useCategoryList } from '@/Api/Hooks/BlogHook'
-import { SelectDropdownComp, TextInput } from '@/Components'
+import { useAddBlog } from '@/Api/Hooks/BlogHook'
+import { AppIcon, ImagePicker, SelectDropdownComp, TextInput, Typo } from '@/Components'
 import { PrimaryLayout } from '@/Layout'
 import { ContextParent } from '@/Routes/BottomTab'
 import { HeaderLeft, RightHeader } from '@/Routes/Header'
 import { COLORS } from '@/Utils/colors'
 import { showToast } from '@/Utils/toastHelper'
+import { AddBlogSchema } from '@/Utils/validationSchema'
+import { useCategoryList } from '@/Api/Hooks/CategoryHook'
 
 const AddBlog = () => {
     const navigation = useNavigation<any>()
@@ -17,8 +19,6 @@ const AddBlog = () => {
     const { setLayoutChange } = layoutContext;
     const { data: CategoryList } = useCategoryList()
     const { mutate: addBlogApi } = useAddBlog();
-
-    console.log(CategoryList, 'data');
 
     const CategoryOptions = CategoryList?.data?.map((el: any) => ({
         title: el?.label,
@@ -47,7 +47,8 @@ const AddBlog = () => {
         const blurUnsubscribe = navigation.addListener('blur', () => {
             parent?.setOptions({
                 headerStyle: { backgroundColor: COLORS.white },
-                headerLeft: null
+                headerLeft: null,
+                headerRight: null
             });
         });
 
@@ -61,9 +62,11 @@ const AddBlog = () => {
         initialValues: {
             title: '',
             category: '',
-            content: ''
+            content: '',
+            image: null
         },
         enableReinitialize: true,
+        validationSchema: AddBlogSchema,
         onSubmit: values => {
             addBlogApi(values, {
                 onSuccess: async (data) => {
@@ -79,9 +82,14 @@ const AddBlog = () => {
                     });
                 },
                 onError: (error: any) => {
-                    console.log(error, '-----err');
-
-                    // loginFormik.setFieldError("password", error?.response?.data?.message)
+                    const serverMessage = error?.response?.data?.message;
+                    if (serverMessage) {
+                        console.log("Validation Error:", serverMessage);
+                        showToast('error', serverMessage)
+                    } else {
+                        showToast('error', error.message)
+                        console.log("Generic Error:", error.message);
+                    }
                 }
             })
         }
@@ -91,11 +99,19 @@ const AddBlog = () => {
         <PrimaryLayout bgColor={COLORS.secondary[700]}>
             <View style={{ flex: 1, padding: 16 }}>
                 <ScrollView contentContainerStyle={{ gap: 16 }} showsVerticalScrollIndicator={false}>
+                    <ImagePicker
+                        isBlog
+                        image={addBlogFormik.values.image}
+                        onImagePrepared={(val: any) => addBlogFormik.setFieldValue('image', val)}
+                        onClear={() => addBlogFormik.setFieldValue('image', null)}
+                    />
                     <TextInput
                         label='Title'
                         placeHolder='Enter title'
                         value={addBlogFormik.values.title}
                         onChangeText={addBlogFormik.handleChange('title')}
+                        error={addBlogFormik.touched.title && addBlogFormik.errors.title}
+                        isMandatory
                     />
                     <SelectDropdownComp
                         label='Category'
@@ -103,7 +119,16 @@ const AddBlog = () => {
                         value={addBlogFormik.values.category}
                         onSelect={(val: any) => { console.log(val, 'val'), addBlogFormik.setFieldValue('category', val?.value) }}
                         options={CategoryOptions}
+                        error={addBlogFormik.touched.category && addBlogFormik.errors.category}
+                        isMandatory
                     />
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <AppIcon name='info' type='Feather' size={16} color={COLORS.status.success} />
+                        <Typo title='Want to add new category?' />
+                        <TouchableOpacity onPress={() => navigation.navigate('AddCategory')}>
+                            <Typo title='Add' color={COLORS.status.success} style={{ textDecorationLine: 'underline' }} />
+                        </TouchableOpacity>
+                    </View>
                     <TextInput
                         label='Content'
                         placeHolder='Enter content'
@@ -111,6 +136,8 @@ const AddBlog = () => {
                         onChangeText={addBlogFormik.handleChange('content')}
                         isTextArea
                         numberOfLines={10}
+                        error={addBlogFormik.touched.content && addBlogFormik.errors.content}
+                        isMandatory
                     />
                 </ScrollView>
             </View>

@@ -104,12 +104,17 @@ const HomeScreen = () => {
         <PrimaryLayout bgColor={COLORS.primary[100]}>
             <View style={{ flex: 1 }}>
                 <FlatList
-                    data={BlogList?.data}
+                    data={BlogList?.data?.filter((el: any) => el?.isPublished)}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ padding: 16, gap: 12 }}
+                    contentContainerStyle={{ padding: 16, gap: 12, flexGrow: 1 }}
                     initialNumToRender={10}
+                    ListEmptyComponent={() => (
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Typo title='No Blogs posted yet' />
+                        </View>
+                    )}
                     maxToRenderPerBatch={10}
                     windowSize={5}
                     removeClippedSubviews={true}

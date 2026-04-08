@@ -13,6 +13,8 @@ import BlogDetails from '@/Screens/Home/SubScreen/BlogDetail';
 import Logout from '@/Screens/Profile/SubScreen/Logout';
 import CardMenu from '@/Screens/Home/SubScreen/CardMenu';
 import BloggerProfile from '@/Screens/Profile/SubScreen/BloggerProfile';
+import AddCategory from '@/Screens/AddCategory';
+import EditBlogScreen from '@/Screens/EditBlog';
 
 // this is used for bottomsheet while navigation
 const options: NativeStackNavigationOptions = {
@@ -87,6 +89,17 @@ export const StackScreens = [
         key: 'bloggerProfile',
         name: 'BloggerProfile',
         component: BloggerProfile
+    },
+    {
+        key: 'addCategory',
+        name: 'AddCategory',
+        component: AddCategory,
+        options: options
+    },
+    {
+        key: 'editBlogScreen',
+        name: 'EditBlog',
+        component: EditBlogScreen,
     }
 ]
 

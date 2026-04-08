@@ -58,15 +58,17 @@ const ProfileScreen = () => {
                 <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: COLORS.primary[700], borderWidth: 2, borderColor: COLORS.primary[400] }}>
                     <Image source={{ uri: userProfile?.data?.profileImg }} style={{ width: '100%', height: '100%', borderRadius: 40 }} />
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 50 }}>
-                    <View style={{ alignItems: 'center' }}>
-                        <Typo title={myBlogList?.count?.toString()} variant="bodyMediumSecondary" />
-                        <Typo title="Posts" variant="bodyMediumTertiary" />
-                    </View>
-                    <View style={{ alignItems: 'center' }}>
-                        <Typo title={FavoriteBlog?.count?.toString() || '0'} variant="bodyMediumSecondary" />
-                        <Typo title="Favorites" variant="bodyMediumTertiary" />
-                    </View>
+                <View style={{ alignItems: 'center' }}>
+                    <Typo title={myBlogList?.count?.toString()} variant="bodyMediumSecondary" />
+                    <Typo title="Posts" variant="bodyMediumTertiary" />
+                </View>
+                <View style={{ alignItems: 'center' }}>
+                    <Typo title={FavoriteBlog?.count?.toString() || '0'} variant="bodyMediumSecondary" />
+                    <Typo title="Favorites" variant="bodyMediumTertiary" />
+                </View>
+                <View style={{ alignItems: 'center' }}>
+                    <Typo title={myBlogList?.data?.filter((el: any) => !el?.isPublished)?.length?.toString() || '0'} variant="bodyMediumSecondary" />
+                    <Typo title="Private Blog" variant="bodyMediumTertiary" ellipsizeMode='tail' numberOfLines={2} style={{ width: 75, textAlign: 'center' }} />
                 </View>
             </View>
 
@@ -110,6 +112,11 @@ const ProfileScreen = () => {
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
                     <Typo title={item?.title} style={{ backgroundColor: COLORS.white, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 4 }} />
                 </View>
+                {!item?.isPublished && (
+                    <View style={{ position: 'absolute', right: 2, bottom: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
+                        <Typo title={'Private'} variant='bodySmallTertiary' style={{ backgroundColor: COLORS.white, paddingHorizontal: 2, borderRadius: 4 }} color={COLORS.status.error} />
+                    </View>
+                )}
             </View>
         </TouchableOpacity>
     );
