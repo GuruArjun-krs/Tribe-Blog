@@ -10,11 +10,10 @@ interface TypoType {
     style?: any
     numberOfLines?: number
     ellipsizeMode?: "head" | "middle" | "tail" | "clip"
-    noOfLine?: number
 }
 
 const Typo = ({ title, variant = 'bodyMediumTertiary', color = COLORS.black, style, ellipsizeMode = 'tail', numberOfLines, ...props }: TypoType) => {
-    
+
     return (
         <Text ellipsizeMode={ellipsizeMode} numberOfLines={numberOfLines} style={[styles[variant], { color: color }, style]} {...props}>
             {title}

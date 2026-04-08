@@ -4,7 +4,7 @@ import { useFormik } from 'formik'
 import { ScrollView, TouchableOpacity, View } from 'react-native'
 
 import { useAddBlog } from '@/Api/Hooks/BlogHook'
-import { AppIcon, SelectDropdownComp, TextInput, Typo } from '@/Components'
+import { AppIcon, ImagePicker, SelectDropdownComp, TextInput, Typo } from '@/Components'
 import { PrimaryLayout } from '@/Layout'
 import { ContextParent } from '@/Routes/BottomTab'
 import { HeaderLeft, RightHeader } from '@/Routes/Header'
@@ -62,7 +62,8 @@ const AddBlog = () => {
         initialValues: {
             title: '',
             category: '',
-            content: ''
+            content: '',
+            image: null
         },
         enableReinitialize: true,
         validationSchema: AddBlogSchema,
@@ -81,7 +82,14 @@ const AddBlog = () => {
                     });
                 },
                 onError: (error: any) => {
-                    console.log(error, '-----err');
+                    const serverMessage = error?.response?.data?.message;
+                    if (serverMessage) {
+                        console.log("Validation Error:", serverMessage);
+                        showToast('error', serverMessage)
+                    } else {
+                        showToast('error', error.message)
+                        console.log("Generic Error:", error.message);
+                    }
                 }
             })
         }
@@ -91,6 +99,12 @@ const AddBlog = () => {
         <PrimaryLayout bgColor={COLORS.secondary[700]}>
             <View style={{ flex: 1, padding: 16 }}>
                 <ScrollView contentContainerStyle={{ gap: 16 }} showsVerticalScrollIndicator={false}>
+                    <ImagePicker
+                        isBlog
+                        image={addBlogFormik.values.image}
+                        onImagePrepared={(val: any) => addBlogFormik.setFieldValue('image', val)}
+                        onClear={() => addBlogFormik.setFieldValue('image', null)}
+                    />
                     <TextInput
                         label='Title'
                         placeHolder='Enter title'

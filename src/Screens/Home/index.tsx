@@ -104,7 +104,7 @@ const HomeScreen = () => {
         <PrimaryLayout bgColor={COLORS.primary[100]}>
             <View style={{ flex: 1 }}>
                 <FlatList
-                    data={BlogList?.data}
+                    data={BlogList?.data?.filter((el: any) => el?.isPublished)}
                     renderItem={renderItem}
                     keyExtractor={(item) => item._id}
                     showsVerticalScrollIndicator={false}

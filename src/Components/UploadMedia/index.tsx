@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import AppIcon from '../AppIcon';
 import { COLORS } from '@/Utils/colors';
 
-const ImagePicker = ({ onImagePrepared, onClear, image }: any) => {
+const ImagePicker = ({ onImagePrepared, onClear, image, isBlog = false }: any) => {
     const [preview, setPreview] = useState<string | null>(null);
 
     useEffect(() => {
@@ -41,12 +41,12 @@ const ImagePicker = ({ onImagePrepared, onClear, image }: any) => {
 
     return (
         <View>
-            <TouchableOpacity style={{ width: 100, height: 100, borderRadius: 50, backgroundColor: '#FAFAFA', borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderColor: COLORS.white }} onPress={pickImage} activeOpacity={0.8}>
+            <TouchableOpacity style={isBlog ? styles.blog : styles.profile} onPress={pickImage} activeOpacity={0.8}>
                 {preview ? (
                     <>
                         <Image
                             source={{ uri: preview }}
-                            style={{ width: '100%', height: '100%', borderRadius: 50, position: 'relative' }}
+                            style={{ width: '100%', height: '100%', position: 'relative', borderRadius: isBlog ? 20 : 50 }}
                             resizeMode='cover'
                         />
                         <TouchableOpacity onPress={clearImage} style={{ position: 'absolute', zIndex: 1, bottom: 0, right: 0, borderWidth: 1, backgroundColor: COLORS.secondary[700], borderRadius: 40, padding: 4, borderColor: COLORS.white }}>
@@ -64,3 +64,24 @@ const ImagePicker = ({ onImagePrepared, onClear, image }: any) => {
 };
 
 export default ImagePicker;
+
+const styles = StyleSheet.create({
+    profile: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        backgroundColor: '#FAFAFA',
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: COLORS.white
+    },
+    blog: {
+        width: '100%',
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5F5F5',
+        borderRadius: 20
+    }
+})

@@ -52,10 +52,8 @@ const EditProfileScreen = () => {
         },
         enableReinitialize: true,
         onSubmit: values => {
-            console.log(values, 'values');
             imageUpdate(values?.profileImg, {
                 onSuccess: (data) => {
-                    console.log(data, '---------');
                     if (data?.success) {
                         const newPayload = {
                             name: values?.name,
