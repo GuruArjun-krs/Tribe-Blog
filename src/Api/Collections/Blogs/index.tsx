@@ -19,6 +19,18 @@ export const AddBlog = async (payload: any) => {
     }).then(res => res.json());
 };
 
+export const UpdateBlog = async (payload: any, id: string) => {
+    const token = await AsyncStorage.getItem('accessToken');
+    return await fetch(`${BASE_URI}/posts/${id}`, {
+        method: 'PUT',
+        body: payload,
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+        },
+    }).then(res => res.json());
+};
+
 export const BlogById = async (id: string) => {
     const res = await api.get(`/posts/${id}`);
     return res?.data;

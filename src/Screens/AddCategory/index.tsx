@@ -54,8 +54,6 @@ const AddCategory = () => {
                             },
                         ],
                     });
-                    console.log(data, '==============ata');
-
                 },
                 onError: (error: any) => {
                     const serverMessage = error?.response?.data?.message;

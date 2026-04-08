@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     },
     blog: {
         width: '100%',
-        height: 100,
+        height: 150,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5F5F5',

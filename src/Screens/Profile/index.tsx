@@ -22,7 +22,6 @@ const ProfileScreen = () => {
     const { data: userProfile } = useUserProfile({ id: userId })
     const { data: myBlogList } = useMyBlogs()
     const { data: FavoriteBlog } = useMyFavorites()
-    console.log(myBlogList, 'myBlogList');
 
     useLayoutEffect(() => {
         const parent = navigation.getParent();
